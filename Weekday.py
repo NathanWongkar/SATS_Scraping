@@ -9,9 +9,12 @@ from selenium import webdriver
 
 # To be able to use the browser and access links.
 import requests
+from pathlib import Path
 
 # Provide directory of webdriver.
-PATH = "/Users/nathanwong/Desktop/chromedriver"
+project_root = Path(__file__).parent
+webdriver_path = str(project_root) + "/" + str("chromedriver")
+PATH = webdriver_path
 
 # Variable to access webdriver to allow for interaction with browser.
 driver = webdriver.Chrome(PATH)
