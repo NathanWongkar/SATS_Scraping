@@ -135,6 +135,143 @@ class SatsScrape:
                 self.brunch_menu.append(self.get_stats(self.brunch_links[i]))
                 self.dinner_menu.append(self.get_stats(self.dinner_links[i]))
     
+    def send_message(self):
+        '''
+        Sending the message on Telegram. 
+        '''
+
+        if self.day == Day.WEEKDAY:
+            self.message = f'''
+        *BREAKFAST:*
+        _{self.breakfast_menu[0]['name']}_
+            Calories: {str(self.breakfast_menu[0]['calories'])}
+            Carbs: {str(self.breakfast_menu[0]['carbs'])}
+            Protein: {str(self.breakfast_menu[0]['protein'])}
+            Fat: {str(self.breakfast_menu[0]['fats'])}
+
+        _{self.breakfast_menu[1]['name']}_
+            Calories: {str(self.breakfast_menu[1]['calories'])}
+            Carbs: {str(self.breakfast_menu[1]['carbs'])}
+            Protein: {str(self.breakfast_menu[1]['protein'])}
+            Fat: {str(self.breakfast_menu[1]['fats'])}
+
+        _{self.breakfast_menu[2]['name']}_
+            Calories: {str(self.breakfast_menu[2]['calories'])}
+            Carbs: {str(self.breakfast_menu[2]['carbs'])}
+            Protein: {str(self.breakfast_menu[2]['protein'])}
+            Fat: {str(self.breakfast_menu[2]['fats'])}
+
+        *LUNCH:*
+        _{self.lunch_menu[0]['name']}_
+            Calories: {str(self.lunch_menu[0]['calories'])}
+            Carbs: {str(self.lunch_menu[0]['carbs'])}
+            Protein: {str(self.lunch_menu[0]['protein'])}
+            Fat: {str(self.lunch_menu[0]['fats'])}
+
+        _{self.lunch_menu[1]['name']}_
+            Calories: {str(self.lunch_menu[1]['calories'])}
+            Carbs: {str(self.lunch_menu[1]['carbs'])}
+            Protein: {str(self.lunch_menu[1]['protein'])}
+            Fat: {str(self.lunch_menu[1]['fats'])}
+
+        _{self.lunch_menu[2]['name']}_
+            Calories: {str(self.lunch_menu[2]['calories'])}
+            Carbs: {str(self.lunch_menu[2]['carbs'])}
+            Protein: {str(self.lunch_menu[2]['protein'])}
+            Fat: {str(self.lunch_menu[2]['fats'])}
+
+        _{self.lunch_menu[3]['name']}_
+            Calories: {str(self.lunch_menu[3]['calories'])}
+            Carbs: {str(self.lunch_menu[3]['carbs'])}
+            Protein: {str(self.lunch_menu[3]['protein'])}
+            Fat: {str(self.lunch_menu[3]['fats'])}
+
+        *DINNER:*
+           _{self.dinner_menu[0]['name']}_
+            Calories: {str(self.dinner_menu[0]['calories'])}
+            Carbs: {str(self.dinner_menu[0]['carbs'])}
+            Protein: {str(self.dinner_menu[0]['protein'])}
+            Fat: {str(self.dinner_menu[0]['fats'])}
+
+        _{self.dinner_menu[1]['name']}_
+            Calories: {str(self.dinner_menu[1]['calories'])}
+            Carbs: {str(self.dinner_menu[1]['carbs'])}
+            Protein: {str(self.dinner_menu[1]['protein'])}
+            Fat: {str(self.dinner_menu[1]['fats'])}
+
+        _{self.dinner_menu[2]['name']}_
+            Calories: {str(self.dinner_menu[2]['calories'])}
+            Carbs: {str(self.dinner_menu[2]['carbs'])}
+            Protein: {str(self.dinner_menu[2]['protein'])}
+            Fat: {str(self.dinner_menu[2]['fats'])}
+
+        _{self.dinner_menu[3]['name']}_
+            Calories: {str(self.dinner_menu[3]['calories'])}
+            Carbs: {str(self.dinner_menu[3]['carbs'])}
+            Protein: {str(self.dinner_menu[3]['protein'])}
+            Fat: {str(self.dinner_menu[3]['fats'])}
+
+            '''
+        else:
+            self.message = f'''
+        *BRUNCH:*
+        _{self.brunch_menu[0]['name']}_
+            Calories: {str(self.brunch_menu[0]['calories'])}
+            Carbs: {str(self.brunch_menu[0]['carbs'])}
+            Protein: {str(self.brunch_menu[0]['protein'])}
+            Fat: {str(self.brunch_menu[0]['fats'])}
+
+        _{self.brunch_menu[1]['name']}_
+            Calories: {str(self.brunch_menu[1]['calories'])}
+            Carbs: {str(self.brunch_menu[1]['carbs'])}
+            Protein: {str(self.brunch_menu[1]['protein'])}
+            Fat: {str(self.brunch_menu[1]['fats'])}
+
+        _{self.brunch_menu[2]['name']}_
+            Calories: {str(self.brunch_menu[2]['calories'])}
+            Carbs: {str(self.brunch_menu[2]['carbs'])}
+            Protein: {str(self.brunch_menu[2]['protein'])}
+            Fat: {str(self.brunch_menu[2]['fats'])}
+
+        _{self.brunch_menu[3]['name']}_
+            Calories: {str(self.brunch_menu[3]['calories'])}
+            Carbs: {str(self.brunch_menu[3]['carbs'])}
+            Protein: {str(self.brunch_menu[3]['protein'])}
+            Fat: {str(self.brunch_menu[3]['fats'])}
+
+        *DINNER:*
+        _{self.dinner_menu[0]['name']}_
+            Calories: {str(self.dinner_menu[0]['calories'])}
+            Carbs: {str(self.dinner_menu[0]['carbs'])}
+            Protein: {str(self.dinner_menu[0]['protein'])}
+            Fat: {str(self.dinner_menu[0]['fats'])}
+
+        _{self.dinner_menu[1]['name']}_
+            Calories: {str(self.dinner_menu[1]['calories'])}
+            Carbs: {str(self.dinner_menu[1]['carbs'])}
+            Protein: {str(self.dinner_menu[1]['protein'])}
+            Fat: {str(self.dinner_menu[1]['fats'])}
+
+        _{self.dinner_menu[2]['name']}_
+            Calories: {str(self.dinner_menu[2]['calories'])}
+            Carbs: {str(self.dinner_menu[2]['carbs'])}
+            Protein: {str(self.dinner_menu[2]['protein'])}
+            Fat: {str(self.dinner_menu[2]['fats'])}
+
+        _{self.dinner_menu[3]['name']}_
+            Calories: {str(self.dinner_menu[3]['calories'])}
+            Carbs: {str(self.dinner_menu[3]['carbs'])}
+            Protein: {str(self.dinner_menu[3]['protein'])}
+            Fat: {str(self.dinner_menu[3]['fats'])}
+
+            '''
+
+        self.message = self.message.replace("&", "%26")
+        self.chat_id = "-799638512"
+        self.message_url = 'https://api.telegram.org/bot5190481628:AAHvjriOdIz_TvR15Q5p39WtAgtF_w7ravU/sendMessage?chat_id=' + str(self.chat_id)  + '&parse_mode=Markdown&text=' + self.message
+        requests.get(self.message_url)
+
+    
 
 
 

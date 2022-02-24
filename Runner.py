@@ -9,3 +9,6 @@ if __name__ == "__main__":
     sats_scrape.get_meal_links()
     sats_scrape.get_all_meals()
     pprint(sats_scrape.breakfast_menu)
+    # pprint(sats_scrape.lunch_menu)
+    # pprint(sats_scrape.dinner_menu)
+    sats_scrape.send_message()
