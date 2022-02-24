@@ -1,7 +1,6 @@
 import os
 import time
 import sys
-from matplotlib.cbook import get_sample_data
 from selenium import webdriver
 import requests
 from enum import Enum
@@ -21,7 +20,7 @@ class SatsScrape:
             webdriver <str>: path to webdriver.
             day <Day>: An indication whether that day is weekday or weekend.
         '''
-        print("initialising webdriver...")
+        print("Initialising webdriver")
         print("-----------------")
         project_root = Path(__file__).parent
         webdriver_path = str(project_root) + "/" + str(webdriver_name)
@@ -42,7 +41,8 @@ class SatsScrape:
             self.brunch_menu = []
         self.dinner_links = []
         self.dinner_menu = []
-        print("done")
+        self.chat_id = "-799638512"
+        print("Webdriver initialised")
         print("-----------------")
     
     def login(self) -> None:
@@ -50,7 +50,7 @@ class SatsScrape:
         Login to the website.
         '''
         print("Logging in")
-        print("--------------")
+        print("-----------------")
         self.driver.get(self.URL)
         self.driver.find_element_by_class_name("jss8").click()
         self.driver.find_element_by_id("userNameInput").send_keys(self.user)
@@ -58,7 +58,7 @@ class SatsScrape:
         # click login button
         self.driver.find_element_by_id("submitButton").click()
         print("Logged in")
-        print("--------------")
+        print("-----------------")
 
     def get_meal_links(self) -> None:
         '''
@@ -66,12 +66,11 @@ class SatsScrape:
         The meal links depend on the day when class is initialised.
         '''
         print("Getting meal links")
-        print("--------------")
+        print("-----------------")
         # click "our food"
         self.driver.find_element_by_class_name("jss97").click()
         time.sleep(2)
         if self.day == Day.WEEKDAY:
-            print("weekday:")
             for i in range(1, 5):
                 # breakfast
                 if i < 4:
@@ -86,7 +85,7 @@ class SatsScrape:
                 xpath = '//*[@id="root"]/div/div/div/div/div/div[3]/div/div[4]/div/div[2]/div/div[' + str(i) + ']/a'
                 element = self.driver.find_element_by_xpath(xpath)
                 self.dinner_links.append(element.get_attribute('href'))
-        elif self.day == Day.WEEKEND:
+        else:
             for i in range(1, 5):
                 # brunch
                 xpath = '//*[@id="root"]/div/div/div/div/div/div[3]/div/div[2]/div/div[2]/div/div[' + str(i) + ']/a'
@@ -96,9 +95,6 @@ class SatsScrape:
                 xpath = '//*[@id="root"]/div/div/div/div/div/div[3]/div/div[3]/div/div[2]/div/div['+ str(i) +']/a'
                 element = self.driver.find_element_by_xpath(xpath)
                 self.dinner_links.append(element.get_attribute('href'))
-        else:
-            print("ERROR: meal links are not found.")
-            sys.exit()
     
     def get_stats(self, link: str) -> "dict[str: str, str: float, str:float, str:float, str:float]":
         '''
@@ -124,6 +120,8 @@ class SatsScrape:
         Getting all the meals (name, calories, protein, carbs, and fats) and append them into a list.
         The information is stored in the state.
         '''
+        print("Getting the stats for all meals.")
+        print("-----------------")
         if self.day == Day.WEEKDAY:   
             for i in range(4):
                 if i < 3:
@@ -134,144 +132,74 @@ class SatsScrape:
             for i in range(4):
                 self.brunch_menu.append(self.get_stats(self.brunch_links[i]))
                 self.dinner_menu.append(self.get_stats(self.dinner_links[i]))
+        print("Finished scraping website")
+        print("-----------------")
     
-    def send_message(self):
+    def craft_message_meal(self, meal: "dict[str: str, str: float, str:float, str:float, str:float]") -> str:
         '''
-        Sending the message on Telegram. 
+        Crafting a message for a specific given meal.
         '''
-
+        message = f'''
+_{meal['name']}_
+    Calories: {meal['calories']}
+    Carbs: {meal['carbs']}
+    Protein: {meal['protein']}
+    Fat: {meal['fats']}
+        '''
+        return message.replace("&", "%26")
+    
+    def craft_message_all(self) -> str:
+        '''
+        Crafting a message for all the meals for that day.
+        '''
         if self.day == Day.WEEKDAY:
-            self.message = f'''
-        *BREAKFAST:*
-        _{self.breakfast_menu[0]['name']}_
-            Calories: {str(self.breakfast_menu[0]['calories'])}
-            Carbs: {str(self.breakfast_menu[0]['carbs'])}
-            Protein: {str(self.breakfast_menu[0]['protein'])}
-            Fat: {str(self.breakfast_menu[0]['fats'])}
+            return f'''
+*Dining Hall Meals For Today*
+*BREAKFAST*\
+{self.craft_message_meal(self.breakfast_menu[0])}\
+{self.craft_message_meal(self.breakfast_menu[1])}\
+{self.craft_message_meal(self.breakfast_menu[2])}\
 
-        _{self.breakfast_menu[1]['name']}_
-            Calories: {str(self.breakfast_menu[1]['calories'])}
-            Carbs: {str(self.breakfast_menu[1]['carbs'])}
-            Protein: {str(self.breakfast_menu[1]['protein'])}
-            Fat: {str(self.breakfast_menu[1]['fats'])}
+*LUNCH*\
+{self.craft_message_meal(self.lunch_menu[0])}\
+{self.craft_message_meal(self.lunch_menu[1])}\
+{self.craft_message_meal(self.lunch_menu[2])}\
+{self.craft_message_meal(self.lunch_menu[3])}\
 
-        _{self.breakfast_menu[2]['name']}_
-            Calories: {str(self.breakfast_menu[2]['calories'])}
-            Carbs: {str(self.breakfast_menu[2]['carbs'])}
-            Protein: {str(self.breakfast_menu[2]['protein'])}
-            Fat: {str(self.breakfast_menu[2]['fats'])}
-
-        *LUNCH:*
-        _{self.lunch_menu[0]['name']}_
-            Calories: {str(self.lunch_menu[0]['calories'])}
-            Carbs: {str(self.lunch_menu[0]['carbs'])}
-            Protein: {str(self.lunch_menu[0]['protein'])}
-            Fat: {str(self.lunch_menu[0]['fats'])}
-
-        _{self.lunch_menu[1]['name']}_
-            Calories: {str(self.lunch_menu[1]['calories'])}
-            Carbs: {str(self.lunch_menu[1]['carbs'])}
-            Protein: {str(self.lunch_menu[1]['protein'])}
-            Fat: {str(self.lunch_menu[1]['fats'])}
-
-        _{self.lunch_menu[2]['name']}_
-            Calories: {str(self.lunch_menu[2]['calories'])}
-            Carbs: {str(self.lunch_menu[2]['carbs'])}
-            Protein: {str(self.lunch_menu[2]['protein'])}
-            Fat: {str(self.lunch_menu[2]['fats'])}
-
-        _{self.lunch_menu[3]['name']}_
-            Calories: {str(self.lunch_menu[3]['calories'])}
-            Carbs: {str(self.lunch_menu[3]['carbs'])}
-            Protein: {str(self.lunch_menu[3]['protein'])}
-            Fat: {str(self.lunch_menu[3]['fats'])}
-
-        *DINNER:*
-           _{self.dinner_menu[0]['name']}_
-            Calories: {str(self.dinner_menu[0]['calories'])}
-            Carbs: {str(self.dinner_menu[0]['carbs'])}
-            Protein: {str(self.dinner_menu[0]['protein'])}
-            Fat: {str(self.dinner_menu[0]['fats'])}
-
-        _{self.dinner_menu[1]['name']}_
-            Calories: {str(self.dinner_menu[1]['calories'])}
-            Carbs: {str(self.dinner_menu[1]['carbs'])}
-            Protein: {str(self.dinner_menu[1]['protein'])}
-            Fat: {str(self.dinner_menu[1]['fats'])}
-
-        _{self.dinner_menu[2]['name']}_
-            Calories: {str(self.dinner_menu[2]['calories'])}
-            Carbs: {str(self.dinner_menu[2]['carbs'])}
-            Protein: {str(self.dinner_menu[2]['protein'])}
-            Fat: {str(self.dinner_menu[2]['fats'])}
-
-        _{self.dinner_menu[3]['name']}_
-            Calories: {str(self.dinner_menu[3]['calories'])}
-            Carbs: {str(self.dinner_menu[3]['carbs'])}
-            Protein: {str(self.dinner_menu[3]['protein'])}
-            Fat: {str(self.dinner_menu[3]['fats'])}
-
+*DINNER*\
+{self.craft_message_meal(self.dinner_menu[0])}\
+{self.craft_message_meal(self.dinner_menu[1])}\
+{self.craft_message_meal(self.dinner_menu[2])}\
+{self.craft_message_meal(self.dinner_menu[3])}\
             '''
         else:
-            self.message = f'''
-        *BRUNCH:*
-        _{self.brunch_menu[0]['name']}_
-            Calories: {str(self.brunch_menu[0]['calories'])}
-            Carbs: {str(self.brunch_menu[0]['carbs'])}
-            Protein: {str(self.brunch_menu[0]['protein'])}
-            Fat: {str(self.brunch_menu[0]['fats'])}
+            return f'''
+*Dining Hall Meals For Today*
+*BRUNCH*\
+{self.craft_message_meal(self.brunch_menu[0])}\
+{self.craft_message_meal(self.brunch_menu[1])}\
+{self.craft_message_meal(self.brunch_menu[2])}\
+{self.craft_message_meal(self.brunch_menu[3])}\
 
-        _{self.brunch_menu[1]['name']}_
-            Calories: {str(self.brunch_menu[1]['calories'])}
-            Carbs: {str(self.brunch_menu[1]['carbs'])}
-            Protein: {str(self.brunch_menu[1]['protein'])}
-            Fat: {str(self.brunch_menu[1]['fats'])}
-
-        _{self.brunch_menu[2]['name']}_
-            Calories: {str(self.brunch_menu[2]['calories'])}
-            Carbs: {str(self.brunch_menu[2]['carbs'])}
-            Protein: {str(self.brunch_menu[2]['protein'])}
-            Fat: {str(self.brunch_menu[2]['fats'])}
-
-        _{self.brunch_menu[3]['name']}_
-            Calories: {str(self.brunch_menu[3]['calories'])}
-            Carbs: {str(self.brunch_menu[3]['carbs'])}
-            Protein: {str(self.brunch_menu[3]['protein'])}
-            Fat: {str(self.brunch_menu[3]['fats'])}
-
-        *DINNER:*
-        _{self.dinner_menu[0]['name']}_
-            Calories: {str(self.dinner_menu[0]['calories'])}
-            Carbs: {str(self.dinner_menu[0]['carbs'])}
-            Protein: {str(self.dinner_menu[0]['protein'])}
-            Fat: {str(self.dinner_menu[0]['fats'])}
-
-        _{self.dinner_menu[1]['name']}_
-            Calories: {str(self.dinner_menu[1]['calories'])}
-            Carbs: {str(self.dinner_menu[1]['carbs'])}
-            Protein: {str(self.dinner_menu[1]['protein'])}
-            Fat: {str(self.dinner_menu[1]['fats'])}
-
-        _{self.dinner_menu[2]['name']}_
-            Calories: {str(self.dinner_menu[2]['calories'])}
-            Carbs: {str(self.dinner_menu[2]['carbs'])}
-            Protein: {str(self.dinner_menu[2]['protein'])}
-            Fat: {str(self.dinner_menu[2]['fats'])}
-
-        _{self.dinner_menu[3]['name']}_
-            Calories: {str(self.dinner_menu[3]['calories'])}
-            Carbs: {str(self.dinner_menu[3]['carbs'])}
-            Protein: {str(self.dinner_menu[3]['protein'])}
-            Fat: {str(self.dinner_menu[3]['fats'])}
-
+*DINNER*\
+{self.craft_message_meal(self.dinner_menu[0])}\
+{self.craft_message_meal(self.dinner_menu[1])}\
+{self.craft_message_meal(self.dinner_menu[2])}\
+{self.craft_message_meal(self.dinner_menu[3])}\
             '''
-
-        self.message = self.message.replace("&", "%26")
-        self.chat_id = "-799638512"
-        self.message_url = 'https://api.telegram.org/bot5190481628:AAHvjriOdIz_TvR15Q5p39WtAgtF_w7ravU/sendMessage?chat_id=' + str(self.chat_id)  + '&parse_mode=Markdown&text=' + self.message
-        requests.get(self.message_url)
-
     
-
+    def send_message(self, message: str):
+        '''
+        Sending the message on Telegram based on the chat id initialised.
+        '''
+        print("Sending Message")
+        print("-----------------")
+        message_url = 'https://api.telegram.org/bot5190481628:AAHvjriOdIz_TvR15Q5p39WtAgtF_w7ravU/sendMessage?chat_id=' + str(self.chat_id)  + '&parse_mode=Markdown&text=' + message
+        requests.get(message_url)
+        print("Message Sent")
+        print("-----------------")
+    
+#TODO custom message e.g. most protein etc for more functions - 
+# used the craft_message_meal for the custom one
 
 
