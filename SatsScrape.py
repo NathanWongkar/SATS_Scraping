@@ -53,8 +53,8 @@ class SatsScrape:
         print("-----------------")
         self.driver.get(self.URL)
         self.driver.find_element_by_class_name("jss8").click()
-        self.driver.find_element_by_id("userNameInput").send_keys(self.user)
-        self.driver.find_element_by_id("passwordInput").send_keys(self.password)
+        self.driver.find_element_by_id("userNameInput").send_keys(str(self.user))
+        self.driver.find_element_by_id("passwordInput").send_keys(str(self.password))
         # click login button
         self.driver.find_element_by_id("submitButton").click()
         print("Logged in")
