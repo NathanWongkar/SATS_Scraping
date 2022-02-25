@@ -6,23 +6,27 @@ import time
 
 # Allow interaction with browser.
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 # To be able to use the browser and access links.
 import requests
+
+# Setting webdriver options.
+chrome_options = Options()
 
 # Provide directory of webdriver.
 PATH = "/Users/nathanwong/Desktop/chromedriver"
 
 # Variable to access webdriver to allow for interaction with browser.
-driver = webdriver.Chrome(PATH)
+driver = webdriver.Chrome(PATH, options=chrome_options)
 
 # Link for the dining hall website.
-URL = "https://satscampuseats.yale-nus.edu.sg/login"
+URL = "https://satscampuseats.yale-nus.edu.sg/"
 
 # Accessing the website.
 driver.get(URL)
-print(driver.title)
 
+print(driver.title)
 # Assigning the user and password from environment variables.
 user = os.environ.get('USER')
 password = os.environ.get('PASSWORD')
