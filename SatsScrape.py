@@ -28,7 +28,7 @@ class SatsScrape:
         self.user = os.environ.get('USER')
         self.password = os.environ.get('PASSWORD')
         self.day = day
-        self.nutrition = ["calories", "protein", "carbs", "fats"]
+        self.nutrition = ["Calories", "Protein", "Carbs", "Fats"]
         # meal links
         if day == Day.WEEKDAY:
             self.breakfast_links = []
@@ -101,7 +101,7 @@ class SatsScrape:
         input:
             link <str>: the link to the meal
         output:
-            stats <dict>: dictionary of name, calories, protein, carbs, and fats.
+            stats <dict>: dictionary of name, Calories, Protein, Carbs, and Fats.
         '''
         self.driver.get(link)
         time.sleep(1)
@@ -140,10 +140,10 @@ class SatsScrape:
         '''
         message = f'''
 _{meal['name']}_
-    Calories: {meal['calories']}
-    Carbs: {meal['carbs']}
-    Protein: {meal['protein']}
-    Fat: {meal['fats']}
+    {self.nutrition[0]}: {meal[self.nutrition[0]]}
+    {self.nutrition[1]}: {meal[self.nutrition[1]]}
+    {self.nutrition[2]}: {meal[self.nutrition[2]]}
+    {self.nutrition[3]}: {meal[self.nutrition[3]]}
         '''
         return message.replace("&", "%26")
     
