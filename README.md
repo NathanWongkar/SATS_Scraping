@@ -15,4 +15,3 @@ To deactivate virtual environment, run `deactivate`.
 
 ### Disclaimer
 _SATS_Scraping contain links to external websites that are not provided or maintained by us. Please note we do not guarantee the accuracy, relevance, timeliness, or completeness of any information on these external websites._
-
