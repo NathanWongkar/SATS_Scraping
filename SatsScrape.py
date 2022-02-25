@@ -1,6 +1,5 @@
 import os
 import time
-import sys
 from selenium import webdriver
 import requests
 from enum import Enum
