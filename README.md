@@ -11,6 +11,7 @@ This project aims to scrape the Yale-NUS dining hall website and send daily meal
 1. Run `python3 -m venv .venv`.
 2. Run `source .venv/bin/activate`.
 3. Run `pip install -r requirements.txt`.
+To deactivate virtual environment, run `deactivate`.
 
 ### Disclaimer
 _SATS_Scraping contain links to external websites that are not provided or maintained by us. Please note we do not guarantee the accuracy, relevance, timeliness, or completeness of any information on these external websites._
