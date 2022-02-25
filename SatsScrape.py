@@ -40,7 +40,8 @@ class SatsScrape:
             self.brunch_menu = []
         self.dinner_links = []
         self.dinner_menu = []
-        self.tele_bot_api = 'https://api.telegram.org/bot5109121038:AAEb_urxQb95JKDplT5bIuuZJMi6ZcG_8LY/sendMessage?chat_id='
+        self.tele_bot_api = os.environ.get('BOTAPI')
+        print(self.tele_bot_api)
         self.chat_ids = ["-799638512", "-1001625632323"]
         print("Webdriver initialised")
         print("-----------------")
