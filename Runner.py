@@ -1,4 +1,4 @@
-import time
+import datetime
 from SatsScrape import SatsScrape, Day  
 from pprint import pprint
 
