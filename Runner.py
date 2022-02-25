@@ -1,14 +1,11 @@
-import datetime
 from SatsScrape import SatsScrape, Day  
-from pprint import pprint
+from datetime import datetime
 
 if __name__ == "__main__":
-    # we need to check if it is weekday or weekend
-    sats_scrape = SatsScrape("chromedriver", Day.WEEKDAY)
+    day = Day.WEEKDAY if datetime.today().weekday() <= 4 else Day.WEEKEND
+    sats_scrape = SatsScrape("chromedriver", day)
     sats_scrape.login()
     sats_scrape.get_meal_links()
     sats_scrape.get_all_meals()
-    pprint(sats_scrape.breakfast_menu)
-    # pprint(sats_scrape.lunch_menu)
-    # pprint(sats_scrape.dinner_menu)
-    sats_scrape.send_message()
+    message = sats_scrape.craft_message_all()
+    sats_scrape.send_message(message)
