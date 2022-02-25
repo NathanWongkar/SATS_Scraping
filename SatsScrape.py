@@ -40,7 +40,8 @@ class SatsScrape:
             self.brunch_menu = []
         self.dinner_links = []
         self.dinner_menu = []
-        self.chat_id = "-799638512"
+        self.tele_bot_api = 'https://api.telegram.org/bot5109121038:AAEb_urxQb95JKDplT5bIuuZJMi6ZcG_8LY/sendMessage?chat_id='
+        self.chat_ids = ["-799638512", "-1001625632323"]
         print("Webdriver initialised")
         print("-----------------")
     
@@ -193,8 +194,9 @@ _{meal['name']}_
         '''
         print("Sending Message")
         print("-----------------")
-        message_url = 'https://api.telegram.org/bot5190481628:AAHvjriOdIz_TvR15Q5p39WtAgtF_w7ravU/sendMessage?chat_id=' + str(self.chat_id)  + '&parse_mode=Markdown&text=' + message
-        requests.get(message_url)
+        for chat_id in self.chat_ids:
+            message_url = self.tele_bot_api + chat_id + '&parse_mode=Markdown&text=' + message
+            requests.get(message_url)
         print("Message Sent")
         print("-----------------")
     
